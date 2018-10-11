@@ -1,5 +1,5 @@
 import whitespacedata as wsd
-testdata = "blehasdfghjkla"
+testdata = "blehasdfghjklaaaa"
 whitespace = wsd.convert_to_whitespace(testdata)
 plaintext = wsd.convert_to_plaintext(whitespace)
 print(whitespace)

@@ -1,4 +1,5 @@
 import bitarray
+import math
 bit_ws_table = {
     (False, False, False): "  ",
     (False, False, True): " 	",
@@ -28,12 +29,12 @@ def convert_to_whitespace(stringdata):
     ba.frombytes(stringdata.encode('utf-8'))
     bitlist = ba.tolist()
     wsdata = ""
-    for x in range(0, int(len(bitlist)/3)):
+    for x in range(0, math.floor(len(bitlist)/3)):
         wsdata += bits_to_whitespace(bitlist[x * 3], bitlist[x * 3 + 1], bitlist[x * 3 + 2])
-    if int(len(bitlist) % 3) == 2:
-        wsdata += bits_to_whitespace(bitlist[-1], False, False)
-    elif int(len(bitlist) % 3) == 1:
+    if len(bitlist) % 3 == 2:
         wsdata += bits_to_whitespace(bitlist[-2], bitlist[-1], False)
+    elif len(bitlist) % 3 == 1:
+        wsdata += bits_to_whitespace(bitlist[-1], False, False)
     return wsdata
 
 def whitespace_to_bits(ws):
@@ -41,10 +42,12 @@ def whitespace_to_bits(ws):
 
 def convert_to_plaintext(wsdata):
 	bitdata = []
-	for x in range(0, int(len(wsdata)/2)):
+	for x in range(0, math.floor(len(wsdata)/2)):
 		print(wsdata[x * 2:x * 2 + 1])
 		bitdata.extend(whitespace_to_bits(wsdata[x * 2:x * 2 + 2]))
-	if (len(bitdata) % 8) != 0:
-		print("whoops")
-		bitdata = bitdata[0:0-(8-(len(bitdata) % 8))]
+	print(len(bitdata) % 8)
+	if (len(bitdata) % 8) == 1:
+		bitdata = bitdata[0:-1]
+	if (len(bitdata) % 8) == 2:
+		bitdata = bitdata[0:-2]
 	return bitarray.bitarray(bitdata).tobytes().decode('utf-8')
